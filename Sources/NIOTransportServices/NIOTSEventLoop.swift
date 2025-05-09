@@ -215,13 +215,9 @@ internal final class NIOTSEventLoop: QoSEventLoop, @unchecked Sendable {
             queue.async { callback(error) }
         }
     }
-
-    @inlinable
     public func preconditionInEventLoop(file: StaticString, line: UInt) {
         dispatchPrecondition(condition: .onQueue(self.loop))
     }
-
-    @inlinable
     public func preconditionNotInEventLoop(file: StaticString, line: UInt) {
         dispatchPrecondition(condition: .notOnQueue(self.loop))
     }

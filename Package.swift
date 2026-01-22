@@ -39,8 +39,8 @@ let package = Package(
         .library(name: "CandleNIOTransportServices", targets: ["CandleNIOTransportServices"])
     ],
     dependencies: [
-        .package(name: "candle-swift-nio", url: "https://github.com/candlefinance/swift-nio.git", branch: "fix-candle-2.82.1"),
-        .package(name: "candle-swift-atomics", url: "https://github.com/candlefinance/swift-atomics.git", branch: "fix-candle-1.2.0"),
+        .package(name: "candle-swift-nio", url: "https://github.com/candlefinance/candle-swift-nio.git", branch: "fix-candle-2.82.1"),
+        .package(name: "candle-swift-atomics", url: "https://github.com/candlefinance/candle-swift-atomics.git", branch: "fix-candle-1.2.0"),
     ],
     targets: [
         .target(

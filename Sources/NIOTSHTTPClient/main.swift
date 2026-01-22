@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Network)
-import NIOCore
-import NIOTransportServices
-import NIOHTTP1
+import CandleNIOCore
+import CandleNIOTransportServices
+import CandleNIOHTTP1
 import Network
 
 @available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 6.0, *)

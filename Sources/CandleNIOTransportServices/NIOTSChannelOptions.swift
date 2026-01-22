@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 #if canImport(Network)
-import NIOCore
+import CandleNIOCore
 import Network
 
 /// Options that can be set explicitly and only on bootstraps provided by `NIOTransportServices`.

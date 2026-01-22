@@ -14,20 +14,20 @@
 
 #if canImport(Network)
 import Foundation
-import NIOCore
-import NIOFoundationCompat
-import NIOConcurrencyHelpers
+import CandleNIOCore
+import CandleNIOFoundationCompat
+import CandleNIOConcurrencyHelpers
 import Dispatch
 import Network
-import Atomics
+import CandleAtomics
 
 @available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 6.0, *)
-internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<NIOTSDatagramChannel> {
+internal final class NIOTSListenerChannel: StateManagedListenerChannel<NIOTSConnectionChannel> {
     /// The TCP options for this listener.
-    private var udpOptions: NWProtocolUDP.Options {
+    private var tcpOptions: NWProtocolTCP.Options {
         get {
-            guard case .udp(let options) = protocolOptions else {
-                fatalError("NIOTSDatagramListenerChannel did not have a UDP protocol state")
+            guard case .tcp(let options) = protocolOptions else {
+                fatalError("NIOTSListenerChannel did not have a TCP protocol state")
             }
 
             return options
@@ -35,24 +35,24 @@ internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<N
         set {
             assert(
                 {
-                    if case .udp = protocolOptions {
+                    if case .tcp = protocolOptions {
                         return true
                     } else {
                         return false
                     }
                 }(),
-                "The protocol options of this channel were not configured as UDP"
+                "The protocol options of this channel were not configured as TCP"
             )
 
-            protocolOptions = .udp(newValue)
+            protocolOptions = .tcp(newValue)
         }
     }
 
     /// The TCP options to use for child channels.
-    private var childUDPOptions: NWProtocolUDP.Options {
+    private var childTCPOptions: NWProtocolTCP.Options {
         get {
-            guard case .udp(let options) = childProtocolOptions else {
-                fatalError("NIOTSDatagramListenerChannel did not have a UDP protocol state")
+            guard case .tcp(let options) = childProtocolOptions else {
+                fatalError("NIOTSListenerChannel did not have a TCP protocol state")
             }
 
             return options
@@ -60,70 +60,71 @@ internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<N
         set {
             assert(
                 {
-                    if case .udp = childProtocolOptions {
+                    if case .tcp = childProtocolOptions {
                         return true
                     } else {
                         return false
                     }
                 }(),
-                "The protocol options of child channelss were not configured as UDP"
+                "The protocol options of child channels were not configured as TCP"
             )
 
-            childProtocolOptions = .udp(newValue)
+            childProtocolOptions = .tcp(newValue)
         }
     }
 
-    /// Create a `NIOTSDatagramListenerChannel` on a given `NIOTSEventLoop`.
+    /// Create a `NIOTSListenerChannel` on a given `NIOTSEventLoop`.
     ///
-    /// Note that `NIOTSDatagramListenerChannel` objects cannot be created on arbitrary loops types.
+    /// Note that `NIOTSListenerChannel` objects cannot be created on arbitrary loops types.
     internal convenience init(
         eventLoop: NIOTSEventLoop,
         qos: DispatchQoS? = nil,
-        udpOptions: NWProtocolUDP.Options,
+        tcpOptions: NWProtocolTCP.Options,
         tlsOptions: NWProtocolTLS.Options?,
         nwParametersConfigurator: (@Sendable (NWParameters) -> Void)?,
         childLoopGroup: EventLoopGroup,
         childChannelQoS: DispatchQoS?,
-        childUDPOptions: NWProtocolUDP.Options,
+        childTCPOptions: NWProtocolTCP.Options,
         childTLSOptions: NWProtocolTLS.Options?,
         childNWParametersConfigurator: (@Sendable (NWParameters) -> Void)?
     ) {
         self.init(
             eventLoop: eventLoop,
-            protocolOptions: .udp(udpOptions),
+            protocolOptions: .tcp(tcpOptions),
             tlsOptions: tlsOptions,
             nwParametersConfigurator: nwParametersConfigurator,
             childLoopGroup: childLoopGroup,
             childChannelQoS: childChannelQoS,
-            childProtocolOptions: .udp(childUDPOptions),
+            childProtocolOptions: .tcp(childTCPOptions),
             childTLSOptions: childTLSOptions,
             childNWParametersConfigurator: childNWParametersConfigurator
         )
     }
 
-    /// Create a `NIOTSDatagramListenerChannel` with an already-established `NWListener`.
+    /// Create a `NIOTSListenerChannel` with an already-established `NWListener`.
     internal convenience init(
         wrapping listener: NWListener,
         on eventLoop: NIOTSEventLoop,
         qos: DispatchQoS? = nil,
-        udpOptions: NWProtocolUDP.Options,
+        tcpOptions: NWProtocolTCP.Options,
         tlsOptions: NWProtocolTLS.Options?,
         nwParametersConfigurator: (@Sendable (NWParameters) -> Void)?,
         childLoopGroup: EventLoopGroup,
         childChannelQoS: DispatchQoS?,
-        childUDPOptions: NWProtocolUDP.Options,
+        childTCPOptions: NWProtocolTCP.Options,
         childTLSOptions: NWProtocolTLS.Options?,
         childNWParametersConfigurator: (@Sendable (NWParameters) -> Void)?
     ) {
         self.init(
             wrapping: listener,
             eventLoop: eventLoop,
-            protocolOptions: .udp(udpOptions),
+            qos: qos,
+            protocolOptions: .tcp(tcpOptions),
             tlsOptions: tlsOptions,
             nwParametersConfigurator: nwParametersConfigurator,
             childLoopGroup: childLoopGroup,
             childChannelQoS: childChannelQoS,
-            childProtocolOptions: .udp(childUDPOptions),
+            childProtocolOptions: .tcp(childTCPOptions),
             childTLSOptions: childTLSOptions,
             childNWParametersConfigurator: childNWParametersConfigurator
         )
@@ -135,11 +136,12 @@ internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<N
             return
         }
 
-        let newChannel = NIOTSDatagramChannel(
+        let newChannel = NIOTSConnectionChannel(
             wrapping: connection,
             on: self.childLoopGroup.next() as! NIOTSEventLoop,
             parent: self,
-            udpOptions: self.childUDPOptions,
+            qos: self.childChannelQoS,
+            tcpOptions: self.childTCPOptions,
             tlsOptions: self.childTLSOptions,
             nwParametersConfigurator: self.childNWParametersConfigurator
         )
@@ -149,9 +151,9 @@ internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<N
     }
 
     internal struct SynchronousOptions: NIOSynchronousChannelOptions {
-        private let channel: NIOTSDatagramListenerChannel
+        private let channel: NIOTSListenerChannel
 
-        fileprivate init(channel: NIOTSDatagramListenerChannel) {
+        fileprivate init(channel: NIOTSListenerChannel) {
             self.channel = channel
         }
 
@@ -170,6 +172,6 @@ internal final class NIOTSDatagramListenerChannel: StateManagedListenerChannel<N
 }
 
 @available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 6.0, *)
-extension NIOTSDatagramListenerChannel: @unchecked Sendable {}
+extension NIOTSListenerChannel: @unchecked Sendable {}
 
 #endif

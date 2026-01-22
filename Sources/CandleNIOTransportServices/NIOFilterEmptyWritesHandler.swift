@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import NIOCore
+import CandleNIOCore
 
 /// A `ChannelHandler` that checks for outbound writes of zero length, which are then dropped. This is
 /// due to a bug in `Network Framework`, where zero byte TCP writes lead to stalled connections.

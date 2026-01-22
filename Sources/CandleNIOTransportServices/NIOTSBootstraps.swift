@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Network)
-import NIOCore
+import CandleNIOCore
 
 /// Shared functionality across NIOTS bootstraps.
 internal enum NIOTSBootstraps {

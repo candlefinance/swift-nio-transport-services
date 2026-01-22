@@ -14,7 +14,7 @@
 
 #if canImport(Network)
 import Network
-import NIOCore
+import CandleNIOCore
 
 /// A tag protocol that can be used to cover all network events emitted by `NIOTransportServices`.
 ///

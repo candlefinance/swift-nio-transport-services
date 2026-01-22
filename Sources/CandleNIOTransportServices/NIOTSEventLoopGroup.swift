@@ -14,11 +14,11 @@
 
 #if canImport(Network)
 import Foundation
-import NIOCore
-import NIOConcurrencyHelpers
+import CandleNIOCore
+import CandleNIOConcurrencyHelpers
 import Dispatch
 import Network
-import Atomics
+import CandleAtomics
 
 /// An `EventLoopGroup` containing `EventLoop`s specifically designed for use with
 /// Network.framework's post-sockets networking API.

@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Network)
-import NIOCore
+import CandleNIOCore
 import Dispatch
 import Network
 

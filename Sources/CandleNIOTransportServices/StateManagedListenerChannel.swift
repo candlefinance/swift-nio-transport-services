@@ -14,12 +14,12 @@
 
 #if canImport(Network)
 import Foundation
-import NIOCore
-import NIOFoundationCompat
-import NIOConcurrencyHelpers
+import CandleNIOCore
+import CandleNIOFoundationCompat
+import CandleNIOConcurrencyHelpers
 import Dispatch
 import Network
-import Atomics
+import CandleAtomics
 
 /// Listener channels do not have active substates: they are either active or they
 /// are not.

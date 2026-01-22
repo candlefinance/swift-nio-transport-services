@@ -14,14 +14,14 @@
 
 #if canImport(Network)
 import Foundation
-import NIOCore
-import NIOConcurrencyHelpers
-import NIOFoundationCompat
-import NIOTLS
+import CandleNIOCore
+import CandleNIOConcurrencyHelpers
+import CandleNIOFoundationCompat
+import CandleNIOTLS
 import Dispatch
 import Network
 import Security
-import Atomics
+import CandleAtomics
 
 /// Channel options for the connection channel.
 @available(OSX 10.14, iOS 12.0, tvOS 12.0, watchOS 6.0, *)

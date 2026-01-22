@@ -14,12 +14,12 @@
 
 #if canImport(Network)
 import Foundation
-import NIOCore
-import NIOFoundationCompat
-import NIOConcurrencyHelpers
+import CandleNIOCore
+import CandleNIOFoundationCompat
+import CandleNIOConcurrencyHelpers
 import Dispatch
 import Network
-import Atomics
+import CandleAtomics
 
 /// An object that conforms to this protocol represents the substate of a channel in the
 /// active state. This can be used to provide more fine-grained tracking of states

@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 #if canImport(Network)
-import NIOCore
+import CandleNIOCore
 
 /// A tag protocol that can be used to cover all errors thrown by `NIOTransportServices`.
 ///

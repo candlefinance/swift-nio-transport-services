@@ -21,8 +21,8 @@ import class Dispatch.DispatchSource
 import Foundation
 import Network
 
-import NIOCore
-import NIOConcurrencyHelpers
+import CandleNIOCore
+import CandleNIOConcurrencyHelpers
 
 /// An `EventLoop` that interacts with `DispatchQoS` to help schedule upcoming work.
 ///

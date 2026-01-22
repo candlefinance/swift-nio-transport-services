@@ -13,12 +13,12 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Network)
-import Atomics
+import CandleAtomics
 import Foundation
-import NIOCore
-import NIOConcurrencyHelpers
-import NIOFoundationCompat
-import NIOTLS
+import CandleNIOCore
+import CandleNIOConcurrencyHelpers
+import CandleNIOFoundationCompat
+import CandleNIOTLS
 import Dispatch
 import Network
 import Security

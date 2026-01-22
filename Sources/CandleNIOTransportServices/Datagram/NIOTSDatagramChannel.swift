@@ -13,12 +13,12 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Network)
-import Atomics
+import CandleAtomics
 import Foundation
-import NIOCore
-import NIOConcurrencyHelpers
-import NIOFoundationCompat
-import NIOTLS
+import CandleNIOCore
+import CandleNIOConcurrencyHelpers
+import CandleNIOFoundationCompat
+import CandleNIOTLS
 import Dispatch
 import Network
 import Security
@@ -158,7 +158,7 @@ internal final class NIOTSDatagramChannel: StateManagedNWConnectionChannel {
     }
 
     func setChannelSpecificOption0<Option>(option: Option, value: Option.Value) throws
-    where Option: NIOCore.ChannelOption {
+    where Option: CandleNIOCore.ChannelOption {
         fatalError("option \(type(of: option)).\(option) not supported")
     }
 

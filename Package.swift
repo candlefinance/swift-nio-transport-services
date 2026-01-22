@@ -34,7 +34,7 @@ let strictConcurrencySettings: [SwiftSetting] = {
 }()
 
 let package = Package(
-    name: "swift-nio-transport-services",
+    name: "candle-swift-nio-transport-services",
     products: [
         .library(name: "CandleNIOTransportServices", targets: ["CandleNIOTransportServices"])
     ],

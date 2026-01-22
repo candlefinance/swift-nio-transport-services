@@ -39,18 +39,18 @@ let package = Package(
         .library(name: "CandleNIOTransportServices", targets: ["CandleNIOTransportServices"])
     ],
     dependencies: [
-        .package(url: "https://github.com/candlefinance/swift-nio.git", branch: "fix-candle-2.82.1"),
-        .package(url: "https://github.com/candlefinance/swift-atomics.git", branch: "fix-candle-1.2.0"),
+        .package(url: "https://github.com/candlefinance/swift-nio.git", name: "candle-swift-nio", branch: "fix-candle-2.82.1"),
+        .package(url: "https://github.com/candlefinance/swift-atomics.git", name: "candle-swift-atomics", branch: "fix-candle-1.2.0"),
     ],
     targets: [
         .target(
             name: "CandleNIOTransportServices",
             dependencies: [
-                .product(name: "CandleNIO", package: "swift-nio"),
-                .product(name: "CandleNIOCore", package: "swift-nio"),
-                .product(name: "CandleNIOFoundationCompat", package: "swift-nio"),
-                .product(name: "CandleNIOTLS", package: "swift-nio"),
-                .product(name: "CandleAtomics", package: "swift-atomics"),
+                .product(name: "CandleNIO", package: "candle-swift-nio"),
+                .product(name: "CandleNIOCore", package: "candle-swift-nio"),
+                .product(name: "CandleNIOFoundationCompat", package: "candle-swift-nio"),
+                .product(name: "CandleNIOTLS", package: "candle-swift-nio"),
+                .product(name: "CandleAtomics", package: "candle-swift-atomics"),
             ],
             swiftSettings: strictConcurrencySettings
         ),
@@ -58,25 +58,25 @@ let package = Package(
             name: "NIOTSHTTPClient",
             dependencies: [
                 "CandleNIOTransportServices",
-                .product(name: "CandleNIOCore", package: "swift-nio"),
-                .product(name: "CandleNIOHTTP1", package: "swift-nio"),
+                .product(name: "CandleNIOCore", package: "candle-swift-nio"),
+                .product(name: "CandleNIOHTTP1", package: "candle-swift-nio"),
             ]
         ),
         .executableTarget(
             name: "NIOTSHTTPServer",
             dependencies: [
                 "CandleNIOTransportServices",
-                .product(name: "CandleNIOCore", package: "swift-nio"),
-                .product(name: "CandleNIOHTTP1", package: "swift-nio"),
+                .product(name: "CandleNIOCore", package: "candle-swift-nio"),
+                .product(name: "CandleNIOHTTP1", package: "candle-swift-nio"),
             ]
         ),
         .testTarget(
             name: "NIOTransportServicesTests",
             dependencies: [
                 "CandleNIOTransportServices",
-                .product(name: "CandleNIOCore", package: "swift-nio"),
-                .product(name: "CandleNIOEmbedded", package: "swift-nio"),
-                .product(name: "CandleAtomics", package: "swift-atomics"),
+                .product(name: "CandleNIOCore", package: "candle-swift-nio"),
+                .product(name: "CandleNIOEmbedded", package: "candle-swift-nio"),
+                .product(name: "CandleAtomics", package: "candle-swift-atomics"),
             ],
             swiftSettings: strictConcurrencySettings
         ),
